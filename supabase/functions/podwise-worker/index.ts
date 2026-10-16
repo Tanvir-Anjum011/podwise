@@ -1,3 +1,7 @@
+declare const EdgeRuntime: {
+  waitUntil<T>(promise: Promise<T>): Promise<T>;
+};
+
 import {
   analysisSchema,
   transcriptionSchema,
@@ -21,7 +25,7 @@ async function db(path: string, init: RequestInit = {}) {
   return r.status === 204 ? null : await r.json()
 }
 
-async function patch(id: string, lease: string, changes: unknown) {
+function patch(id: string, lease: string, changes: Record<string, unknown>) {
   return db(`podwise_jobs?id=eq.${id}&lease_id=eq.${lease}`, {
     method: 'PATCH',
     body: JSON.stringify({ ...changes, updated_at: new Date().toISOString() }),
